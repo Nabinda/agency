@@ -1,0 +1,92 @@
+extends admin_layout.pug
+
+//- Set the active page for the sidebar
+block append head
+  - var activePage = 'employees';
+
+//- Page Specific Styles
+block append head
+  style.
+    .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; color: var(--text-light); }
+    .bg-input { background-color: #0a0f18; border: 1px solid var(--border-color); color: white; }
+    .bg-input:focus { border-color: var(--admin-color); color: white; box-shadow: none; }
+    .table { --bs-table-bg: transparent; color: var(--text-light); }
+    .table thead th { border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 500; padding: 1rem 1.5rem; }
+    .table tbody td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    .btn-icon { color: var(--text-muted); padding: 0.4rem; border-radius: 0.4rem; }
+    .btn-icon:hover { background-color: rgba(255,255,255,0.1); color: white; }
+    .btn-primary { background-color: var(--admin-color); border: none; }
+    .badge-active { background-color: var(--admin-color); color: white; padding: 0.4em 0.8em; border-radius: 2rem; font-size: 0.75rem; }
+    .badge-inactive { background-color: rgba(255,255,255,0.1); color: var(--text-muted); padding: 0.4em 0.8em; border-radius: 2rem; font-size: 0.75rem; }
+    
+    /* Dropdown Styles */
+    .dropdown-menu-dark { background-color: var(--card-bg); border: 1px solid var(--border-color); }
+    .dropdown-item { color: var(--text-light); }
+    .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.05); color: white; }
+
+//- The Content Block
+block content
+  //- Page Header
+  .d-flex.flex-wrap.justify-content-between.align-items-center.mb-4.gap-3
+    div
+      h2.fw-bold.mb-1 Employees
+      p.text-muted.mb-0 Manage your team members
+    button.btn.btn-primary.px-4.py-2
+      +icon('plus', 'me-2')
+      | Add Employee
+
+  //- Search & Filter
+  .card.mb-4
+    .card-body.p-2
+      .row.g-2.align-items-center
+        .col
+          .input-group
+            span.input-group-text.bg-input.border-end-0
+              +icon('search')
+            input.form-control.bg-input.border-start-0(type="text", placeholder="Search by name or email...")
+        
+        //- Status Dropdown
+        .col-auto
+          .dropdown
+            button.btn.bg-input.dropdown-toggle.d-flex.align-items-center(type="button", data-bs-toggle="dropdown", aria-expanded="false")
+              +icon('filter', 'me-2')
+              | All Status
+            ul.dropdown-menu.dropdown-menu-end.dropdown-menu-dark
+              li: a.dropdown-item(href="#") All Status
+              li: a.dropdown-item(href="#") Active
+              li: a.dropdown-item(href="#") Inactive
+              li: a.dropdown-item(href="#") On Leave
+
+  //- Employee Table
+  .card
+    .table-responsive
+      table.table.align-middle.mb-0
+        thead
+          tr
+            th Name
+            th Email
+            th Job Type
+            th Hourly Rate
+            th Status
+            th.text-end Actions
+        tbody
+          //- Loop through the 'data' variable passed from the router
+          each employee in data
+            tr
+              td.fw-bold= employee.name
+              td.text-muted= employee.email
+              td= employee.role
+              td= '$' + employee.hourly_rate + '/hr'
+              td
+                //- Conditional Styling based on status
+                if employee.status == 'Active'
+                  span.badge-active Active
+                else
+                  span.badge-inactive= employee.status
+              td.text-end
+                //- Edit Button
+                button.btn.btn-icon.me-1
+                  +icon('pencil')
+                //- Delete Button 
+                button.btn.btn-icon.text-danger
+                  +icon('trash')

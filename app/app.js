@@ -28,11 +28,18 @@ app.get("/admin-login", function (req, res) {
 
 app.post("/admin-login", async (req, res) => {
   const { email, password } = req.body;
-  res.redirect("admin-dashboard");
+  res.redirect("admin/dashboard");
 });
 
-app.get("/admin-dashboard", function (req, res) {
+app.get("/admin/dashboard", function (req, res) {
   res.render("admin/admin_dashboard");
+});
+
+app.get("/admin/employees", function (req, res) {
+  sql = "SELECT id, name, email, role, hourly_rate, status FROM employees;";
+  db.query(sql).then((results) => {
+    res.render("admin/employee_list", { data: results });
+  });
 });
 
 app.get("/employee-login", function (req, res) {
@@ -46,16 +53,6 @@ app.post("/employee-login", async (req, res) => {
 
 app.get("/employee-dashboard", function (req, res) {
   res.render("employee/employee_dashboard");
-});
-
-// Create a route for testing the db
-app.get("/db_test", function (req, res) {
-  // Assumes a table called test_table exists in your database
-  sql = "select * from test_table";
-  db.query(sql).then((results) => {
-    console.log(results);
-    res.send(results);
-  });
 });
 
 // Start server on port 3000
