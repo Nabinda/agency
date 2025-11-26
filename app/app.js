@@ -14,15 +14,38 @@ const db = require("./services/db");
 app.set("view engine", "pug");
 app.set("views", "./app/views");
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Create a route for root - /
 app.get("/", function (req, res) {
   res.render("main");
 });
 
-// Create a route to see extended layout
-app.get("/extend", function (req, res) {
-  res.render("extend");
+app.get("/admin-login", function (req, res) {
+  res.render("admin/admin_login");
+});
+
+app.post("/admin-login", async (req, res) => {
+  const { email, password } = req.body;
+  res.redirect("admin-dashboard");
+});
+
+app.get("/admin-dashboard", function (req, res) {
+  res.render("admin/admin_dashboard");
+});
+
+app.get("/employee-login", function (req, res) {
+  res.render("employee/employee_login");
+});
+
+app.post("/employee-login", async (req, res) => {
+  const { email, password } = req.body;
+  res.redirect("employee-dashboard");
+});
+
+app.get("/employee-dashboard", function (req, res) {
+  res.render("employee/employee_dashboard");
 });
 
 // Create a route for testing the db

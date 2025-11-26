@@ -1,0 +1,33 @@
+//- Schedule Row Mixin
+//- Used in: Employee Dashboard
+//- Params:
+//-   startDate: Date string (e.g. "Monday, Jan 15")
+//-   endDate: Time/Duration string (e.g. "9:00 AM - 5:00 PM • 8h")
+//-   status: Enum string ('completed', 'working', 'scheduled')
+mixin scheduleRow(startDate, endDate, status)
+  .list-group-item.bg-transparent.schedule-item.px-4
+    .row.align-items-center
+      .col-12.col-md-6.mb-2.mb-md-0
+        h6.fw-bold.mb-1= startDate
+        span.text-muted.small= endDate
+      .col-12.col-md-6.text-md-end
+        
+        //- Switch logic based on the status string
+        case status
+          when 'completed'
+            //- Green Badge
+            .status-badge
+              +icon('check', 'me-1')
+              | Completed
+          
+          when 'working'
+            //- Blue Badge (Active)
+            .status-badge(style="background-color: rgba(59, 130, 246, 0.15); color: #3b82f6;")
+              +icon('hourglass', 'me-1')
+              | Working Now
+          
+          default
+            //- Yellow Badge (Pending)
+            .status-badge(style="background-color: rgba(234, 179, 8, 0.15); color: #eab308;")
+              +icon('calendar', 'me-1')
+              | Scheduled

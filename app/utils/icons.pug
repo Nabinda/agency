@@ -1,0 +1,56 @@
+mixin icon(name, extraClasses='')
+  
+  - var attributes = attributes || {}
+  
+  case name
+    //- Navigation Icons
+    when 'dashboard'
+      i.bi.bi-grid-fill(class=extraClasses)&attributes(attributes)
+    when 'user'
+      i.bi.bi-person(class=extraClasses)&attributes(attributes)
+    when 'profile-circle'
+      i.bi.bi-person-circle(class=extraClasses)&attributes(attributes)
+    when 'clock'
+      i.bi.bi-clock(class=extraClasses)&attributes(attributes)
+    when 'calendar'
+      i.bi.bi-calendar-week(class=extraClasses)&attributes(attributes)
+    when 'calendar-event'
+      i.bi.bi-calendar-event(class=extraClasses)&attributes(attributes)
+    when 'sun'
+      i.bi.bi-sun(class=extraClasses)&attributes(attributes)
+    when 'money'
+      i.bi.bi-cash-coin(class=extraClasses)&attributes(attributes)
+    when 'file'
+      i.bi.bi-file-earmark-text(class=extraClasses)&attributes(attributes)
+    when 'settings'
+      i.bi.bi-gear-wide-connected(class=extraClasses)&attributes(attributes)
+    when 'logout'
+      i.bi.bi-box-arrow-right(class=extraClasses)&attributes(attributes)
+    when 'menu'
+      i.bi.bi-list(class=extraClasses)&attributes(attributes)
+    
+    //- UI/Status Icons
+    when 'arrow-right'
+      i.bi.bi-arrow-right(class=extraClasses)&attributes(attributes)
+    when 'check'
+      i.bi.bi-check-circle(class=extraClasses)&attributes(attributes)
+    when 'check-fill'
+      i.bi.bi-check-circle-fill(class=extraClasses)&attributes(attributes)
+    when 'alert'
+      i.bi.bi-exclamation-circle(class=extraClasses)&attributes(attributes)
+    when 'hourglass'
+      i.bi.bi-hourglass-split(class=extraClasses)&attributes(attributes)
+    when 'clipboard'
+      i.bi.bi-clipboard-check(class=extraClasses)&attributes(attributes)
+    when 'wallet'
+      i.bi.bi-wallet2(class=extraClasses)&attributes(attributes)
+    when 'stopwatch'
+      i.bi.bi-stopwatch(class=extraClasses)&attributes(attributes)
+    when 'emoji-smile'
+      i.bi.bi-emoji-smile(class=extraClasses)&attributes(attributes)
+    when 'shield'
+      i.bi.bi-shield-lock(class=extraClasses)&attributes(attributes)
+
+    //- Fallback for missing icons
+    default
+      i.bi.bi-question-circle(class=extraClasses)&attributes(attributes)

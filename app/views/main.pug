@@ -5,12 +5,17 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Workforce Manager
 
-    // Load Bootstrap CSS
+    //- Load Bootstrap CSS
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css")
-    // Load Bootstrap JS
+    //- Load Bootstrap Icons (Required)
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css")
+    //- Load Bootstrap JS
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
+    
+    //- Include Icons Utility (Path assumes this is in app/views/)
+    include ../utils/icons.pug
 
-    // Custom Styles
+    //- Custom Styles
     style.
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
       :root {
@@ -40,6 +45,13 @@ html(lang="en")
           border-radius: 0.5rem;
           margin-right: 1rem;
           line-height: 1;
+          /* UPDATE: Handle Font Icon Sizing */
+          font-size: 2rem;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 56px;
+          height: 56px;
       }
       .icon-admin { background-color: rgba(59, 130, 246, 0.2); color: var(--admin-color); }
       .icon-employee { background-color: rgba(20, 184, 166, 0.2); color: var(--employee-color); }
@@ -77,8 +89,9 @@ html(lang="en")
       // Header
       header.text-center.mb-5.mb-lg-6
         .d-flex.justify-content-center.mb-4
-          svg.custom-icon.icon-admin.border.border-primary.border-opacity-25(width="48", height="48", xmlns="http://www.w3.org/2000/svg", viewBox="0 0 24 24", fill="none", stroke="currentColor", stroke-width="2", stroke-linecap="round", stroke-linejoin="round")
-            path(d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z")
+          //- Header Icon
+          +icon('shield', 'custom-icon icon-admin border border-primary border-opacity-25')
+          
         h1.display-4.fw-bold.text-white.mb-3 Workforce Manager
         p.lead.text-secondary.mx-auto(style="max-width: 600px;") Modern time tracking and workforce management system. Track hours, manage schedules, and streamline payroll.
 
@@ -91,8 +104,7 @@ html(lang="en")
             .card-body.p-4.p-lg-5
               .d-flex.align-items-center.mb-4
                 .custom-icon.icon-admin
-                  svg(width="24", height="24", xmlns="http://www.w3.org/2000/svg", viewBox="0 0 24 24", fill="none", stroke="currentColor", stroke-width="2", stroke-linecap="round", stroke-linejoin="round")
-                    path(d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z")
+                  +icon('shield')
                 h2.h4.fw-bold.text-white.mb-0 Admin Portal
               p.text-secondary.mb-4 Manage employees, assign working hours, review requests, and handle payroll
               ul.feature-list.feature-list-admin.mb-5
@@ -100,11 +112,9 @@ html(lang="en")
                 li.text-light Working hours assignment
                 li.text-light Request approvals
                 li.text-light Payroll processing
-              a.btn.btn-admin.btn-lg.w-100.d-flex.justify-content-center.align-items-center(href="#")
+              a.btn.btn-admin.btn-lg.w-100.d-flex.justify-content-center.align-items-center(href="admin-login")
                 | Admin Login
-                svg.ms-2(width="20", height="20", xmlns="http://www.w3.org/2000/svg", viewBox="0 0 24 24", fill="none", stroke="currentColor", stroke-width="2", stroke-linecap="round", stroke-linejoin="round")
-                  line(x1="5", y1="12", x2="19", y2="12")
-                  polyline(points="12 5 19 12 12 19")
+                +icon('arrow-right', 'ms-2')
 
         // Employee Card
         .col-md-6
@@ -112,9 +122,7 @@ html(lang="en")
             .card-body.p-4.p-lg-5
               .d-flex.align-items-center.mb-4
                 .custom-icon.icon-employee
-                  svg(width="24", height="24", xmlns="http://www.w3.org/2000/svg", viewBox="0 0 24 24", fill="none", stroke="currentColor", stroke-width="2", stroke-linecap="round", stroke-linejoin="round")
-                    path(d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2")
-                    circle(cx="12", cy="7", r="4")
+                  +icon('user')
                 h2.h4.fw-bold.text-white.mb-0 Employee Portal
               p.text-secondary.mb-4 Clock in/out, view schedules, request holidays, and access payslips
               ul.feature-list.feature-list-employee.mb-5
@@ -122,11 +130,9 @@ html(lang="en")
                 li.text-light Schedule viewing
                 li.text-light Holiday requests
                 li.text-light Payslip access
-              a.btn.btn-employee.btn-lg.w-100.d-flex.justify-content-center.align-items-center(href="#")
+              a.btn.btn-employee.btn-lg.w-100.d-flex.justify-content-center.align-items-center(href="employee-login")
                 | Employee Login
-                svg.ms-2(width="20", height="20", xmlns="http://www.w3.org/2000/svg", viewBox="0 0 24 24", fill="none", stroke="currentColor", stroke-width="2", stroke-linecap="round", stroke-linejoin="round")
-                  line(x1="5", y1="12", x2="19", y2="12")
-                  polyline(points="12 5 19 12 12 19")
+                +icon('arrow-right', 'ms-2')
 
     footer.text-center.text-secondary.mt-auto.pb-3
       small Modern workforce management made simple
