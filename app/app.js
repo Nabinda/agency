@@ -7,6 +7,8 @@ var app = express();
 // Add static files location
 app.use(express.static("static"));
 
+const employeeController = require("./controllers/employeesController");
+
 // Get the functions in the db.js file to use
 const db = require("./services/db");
 
@@ -35,12 +37,18 @@ app.get("/admin/dashboard", function (req, res) {
   res.render("admin/admin_dashboard");
 });
 
-app.get("/admin/employees", function (req, res) {
-  sql = "SELECT id, name, email, role, hourly_rate, status FROM employees;";
-  db.query(sql).then((results) => {
-    res.render("admin/employee_list", { data: results });
-  });
-});
+// use the controller in your route
+app.get("/admin/employees", employeeController.employees);
+
+// use the controller in your route
+app.get("/admin/employees/:id", employeeController.employee_id);
+
+// app.get("/admin/employees", function (req, res) {
+//   sql = "SELECT id, name, email, role, hourly_rate, status FROM employees;";
+//   db.query(sql).then((results) => {
+//     res.render("admin/employee_list", { data: results });
+//   });
+// });
 
 app.get("/employee-login", function (req, res) {
   res.render("employee/employee_login");
