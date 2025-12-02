@@ -1,4 +1,4 @@
-const db = require("../services/db");
+const db = require("../config/db");
 
 class Employee {
   static async getList() {

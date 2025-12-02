@@ -41,11 +41,13 @@ CREATE TABLE `employees` (
   PRIMARY KEY (`id`)
 );
 
+
+
 -- Insert dummy employee data
 INSERT INTO `employees` (`name`, `email`, `role`, `hourly_rate`, `status`, `password`)
 VALUES
-('John Smith', 'john@agency.com', 'Developer', 45.00, 'Active', 'password123'),
-('Sarah Johnson', 'sarah@agency.com', 'Designer', 40.00, 'Active', 'password123'),
-('Mike Brown', 'mike@agency.com', 'Project Manager', 55.00, 'Active', 'password123'),
-('Emma Davis', 'emma@agency.com', 'Developer', 42.00, 'Inactive', 'password123'),
-('James Wilson', 'james@agency.com', 'QA Engineer', 38.00, 'Active', 'password123');
+('John Smith', 'john@agency.com', 'Developer', 45.00, 'Active', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66'),
+('Sarah Johnson', 'sarah@agency.com', 'Designer', 40.00, 'Active', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66'),
+('Mike Brown', 'mike@agency.com', 'Project Manager', 55.00, 'Active', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66'),
+('Emma Davis', 'emma@agency.com', 'Developer', 42.00, 'Inactive', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66'),
+('James Wilson', 'james@agency.com', 'QA Engineer', 38.00, 'Active', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66');

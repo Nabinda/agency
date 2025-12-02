@@ -1,6 +1,6 @@
 // controllers/employeesController.js
 
-const Employee = require("../model/employee");
+const Employee = require("../models/employee");
 
 const employees = async (req, res) => {
   const employees = await Employee.getList();

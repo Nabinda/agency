@@ -1,69 +1,48 @@
-// Import express.js
 const express = require("express");
+const session = require("express-session");
+const path = require("path");
+
+
 
 // Create express app
-var app = express();
+const app = express();
 
-// Add static files location
-app.use(express.static("static"));
+// Routes
+const adminRoutes = require("./routes/adminRoute.js");
+const employeeRoutes = require("./routes/employeeRoute");
 
-const employeeController = require("./controllers/employeesController");
-
-// Get the functions in the db.js file to use
-const db = require("./services/db");
-
-// Use the Pug templating engine
+// Pug setup
 app.set("view engine", "pug");
 app.set("views", "./app/views");
+
+// Middleware
+app.use(express.static("static"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Create a route for root - /
-app.get("/", function (req, res) {
-  res.render("main");
-});
+// Session
+app.use(
+  session({
+    secret: "someStrongSecret123",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 },
+  })
+);
 
-app.get("/admin-login", function (req, res) {
-  res.render("admin/admin_login");
-});
+// Root route
+app.get("/", (req, res) => res.render("main"));
 
-app.post("/admin-login", async (req, res) => {
-  const { email, password } = req.body;
-  res.redirect("admin/dashboard");
-});
+// Use modular routes
+app.use("/", adminRoutes);
+app.use("/", employeeRoutes);
 
-app.get("/admin/dashboard", function (req, res) {
-  res.render("admin/admin_dashboard");
-});
+// 404
+app.use((req, res) => res.status(404).render("404", { url: req.originalUrl }));
 
-// use the controller in your route
-app.get("/admin/employees", employeeController.employees);
-
-// use the controller in your route
-app.get("/admin/employees/:id", employeeController.employee_id);
-
-// app.get("/admin/employees", function (req, res) {
-//   sql = "SELECT id, name, email, role, hourly_rate, status FROM employees;";
-//   db.query(sql).then((results) => {
-//     res.render("admin/employee_list", { data: results });
-//   });
-// });
-
-app.get("/employee-login", function (req, res) {
-  res.render("employee/employee_login");
-});
-
-app.post("/employee-login", async (req, res) => {
-  const { email, password } = req.body;
-  res.redirect("employee-dashboard");
-});
-
-app.get("/employee-dashboard", function (req, res) {
-  res.render("employee/employee_dashboard");
-});
-
-// Start server on port 3000
-app.listen(3000, function () {
-  console.log(`Server running at http://127.0.0.1:3000/`);
-});
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =>
+  console.log(`Server running at http://127.0.0.1:${PORT}/`)
+);
