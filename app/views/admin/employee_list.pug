@@ -31,32 +31,9 @@ block content
     div
       h2.fw-bold.mb-1 Employees
       p.text-muted.mb-0 Manage your team members
-    button.btn.btn-primary.px-4.py-2
+    a.btn.btn-primary.px-4.py-2(href="add_employee.html")
       +icon('plus', 'me-2')
       | Add Employee
-
-  //- Search & Filter
-  .card.mb-4
-    .card-body.p-2
-      .row.g-2.align-items-center
-        .col
-          .input-group
-            span.input-group-text.bg-input.border-end-0
-              +icon('search')
-            input.form-control.bg-input.border-start-0(type="text", placeholder="Search by name or email...")
-        
-        //- Status Dropdown
-        .col-auto
-          .dropdown
-            button.btn.bg-input.dropdown-toggle.d-flex.align-items-center(type="button", data-bs-toggle="dropdown", aria-expanded="false")
-              +icon('filter', 'me-2')
-              | All Status
-            ul.dropdown-menu.dropdown-menu-end.dropdown-menu-dark
-              li: a.dropdown-item(href="#") All Status
-              li: a.dropdown-item(href="#") Active
-              li: a.dropdown-item(href="#") Inactive
-              li: a.dropdown-item(href="#") On Leave
-
   //- Employee Table
   .card
     .table-responsive
@@ -87,6 +64,19 @@ block content
                 //- Edit Button
                 button.btn.btn-icon.me-1
                   +icon('pencil')
-                //- Delete Button 
-                button.btn.btn-icon.text-danger
+                //- Delete Button (Triggers Modal)
+                button.btn.btn-icon.text-danger(type="button", data-bs-toggle="modal", data-bs-target="#deleteModal")
                   +icon('trash')
+
+  //- Delete Confirmation Modal
+  .modal.fade#deleteModal(tabindex="-1", aria-hidden="true")
+    .modal-dialog.modal-dialog-centered
+      .modal-content(style="background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light);")
+        .modal-header.border-secondary.border-opacity-25
+          h5.modal-title Confirm Deletion
+          button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
+        .modal-body
+          p.text-muted.mb-0 Are you sure you want to remove this employee? This action cannot be undone.
+        .modal-footer.border-top-0
+          button.btn.btn-outline-secondary(type="button", data-bs-dismiss="modal") Cancel
+          button.btn.btn-danger(type="button") Delete Employee

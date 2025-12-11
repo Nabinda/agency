@@ -26,9 +26,16 @@ router.get("/admin/dashboard", isAdminLoggedIn, (req, res) => {
 });
 
 // Employee list (admin only)
-router.get("/admin/employees", employeeController.employees);
-router.get("/admin/employees/:id", employeeController.employee_id);
+router.get("/admin/employees", isAdminLoggedIn, employeeController.employees);
+router.get("/admin/add-employee", isAdminLoggedIn, (req, res) => {
+  res.render("admin/add_employee");
+});
+router.get(
+  "/admin/employees/:id",
+  isAdminLoggedIn,
+  employeeController.employee_id
+);
 // Logout
-router.get("/admin-logout", adminLogout);
+router.get("/admin-logout", isAdminLoggedIn, adminLogout);
 
 module.exports = router;

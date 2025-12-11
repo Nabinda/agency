@@ -1,0 +1,104 @@
+extends admin_layout.pug
+
+block append head
+  - var activePage = 'employees';
+
+block append head
+  style.
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-light);
+    }
+    /* Input Styling */
+    .bg-input {
+      background-color: #0a0f18 !important;
+      border: 1px solid var(--border-color);
+      color: white !important;
+    }
+    .bg-input::placeholder { color: rgba(255, 255, 255, 0.3); }
+    .bg-input:focus {
+      border-color: var(--admin-color);
+      box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+    }
+    .input-group-text {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--border-color);
+      color: var(--text-muted);
+    }
+    .form-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    }
+
+block content
+  //- Header
+  .d-flex.align-items-center.mb-4
+    a.btn.btn-outline-secondary.me-3(href="")
+      +icon('profile-circle')
+    div
+      h2.fw-bold.mb-1 Add New Employee
+      p.text-muted.mb-0 Create a new account for a team member
+
+  //- Main Form
+  .row
+    .col-12
+      .card
+        .card-body.p-4
+          form(method="POST" action="")
+            
+            h5.fw-bold.text-white.mb-3 Personal Information
+            .row.g-3.mb-4
+              .col-12.col-md-6
+                label.form-label.text-muted.small.fw-bold(for="name") FULL NAME
+                .input-group
+                  span.input-group-text.bg-input.border-end-0
+                    +icon('user')
+                  input#name.form-control.bg-input.border-start-0(type="text", name="name", placeholder="e.g. John Smith", required)
+              
+              .col-12.col-md-6
+                label.form-label.text-muted.small.fw-bold(for="email") EMAIL ADDRESS
+                .input-group
+                  span.input-group-text.bg-input.border-end-0
+                    i.bi.bi-envelope
+                  input#email.form-control.bg-input.border-start-0(type="email", name="email", placeholder="john@agency.com", required)
+
+            h5.fw-bold.text-white.mb-3 Job Details
+            .row.g-3.mb-4
+              .col-12.col-md-6
+                label.form-label.text-muted.small.fw-bold(for="role") JOB ROLE
+                select#role.form-select.bg-input(name="role", required)
+                  option(selected disabled value="") Select a role...
+                  option(value="Developer") Developer
+                  option(value="Designer") Designer
+                  option(value="Project Manager") Project Manager
+                  option(value="QA Engineer") QA Engineer
+                  option(value="HR Manager") HR Manager
+
+              .col-12.col-md-6
+                label.form-label.text-muted.small.fw-bold(for="hourly_rate") HOURLY RATE ($)
+                .input-group
+                  span.input-group-text.bg-input.border-end-0 $
+                  input#hourly_rate.form-control.bg-input.border-start-0(type="number", name="hourly_rate", placeholder="0.00", step="0.01", required)
+
+            h5.fw-bold.text-white.mb-3 Security
+            .row.g-3.mb-4
+              .col-12.col-md-6
+                label.form-label.text-muted.small.fw-bold(for="password") PASSWORD
+                .input-group
+                  span.input-group-text.bg-input.border-end-0
+                    i.bi.bi-lock
+                  input#password.form-control.bg-input.border-start-0(type="password", name="password", placeholder="Set initial password", required)
+              
+              .col-12.col-md-6
+                label.form-label.text-muted.small.fw-bold(for="status") ACCOUNT STATUS
+                select#status.form-select.bg-input(name="status")
+                  option(value="Active" selected) Active
+                  option(value="Inactive") Inactive
+                  option(value="On Leave") On Leave
+
+            hr.border-secondary.border-opacity-25.my-4
+
+            .d-flex.justify-content-end.gap-2
+              a.btn.btn-outline-secondary.px-4(href="employees") Cancel
+              button.btn.btn-primary.px-4(type="submit")
+                | Create Employee

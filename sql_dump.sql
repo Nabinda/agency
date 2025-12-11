@@ -1,15 +1,10 @@
 CREATE DATABASE IF NOT EXISTS agency_management;
 USE agency_management;
 
-------------------------------------------------------------
--- DROP OLD TABLES (optional — for clean setup)
-------------------------------------------------------------
+
 DROP TABLE IF EXISTS `admins`;
 DROP TABLE IF EXISTS `employees`;
 
-------------------------------------------------------------
--- CREATE ADMINS TABLE
-------------------------------------------------------------
 CREATE TABLE `admins` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
@@ -19,16 +14,13 @@ CREATE TABLE `admins` (
   PRIMARY KEY (`id`)
 );
 
--- Insert dummy admin data
 INSERT INTO `admins` (`name`, `email`, `password`)
 VALUES 
-('Main Administrator', 'admin@agency.com', 'admin123'),
-('Super Admin', 'superadmin@agency.com', 'super123');
+('Main Administrator', 'admin@agency.com', '$2a$12$Yq3bZUeLRad64J1Q6NRfceazpsm.1yUifsCix3tJHeSp32jsxPD7y'),
+('Super Admin', 'superadmin@agency.com', '$2a$12$vLTjSs2pVCiAhcaMPqMDOOpYW29OP52jwWEfryn15DGpY2vhhbxIG');
 
 
-------------------------------------------------------------
--- CREATE EMPLOYEES TABLE
-------------------------------------------------------------
+
 CREATE TABLE `employees` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
@@ -42,8 +34,6 @@ CREATE TABLE `employees` (
 );
 
 
-
--- Insert dummy employee data
 INSERT INTO `employees` (`name`, `email`, `role`, `hourly_rate`, `status`, `password`)
 VALUES
 ('John Smith', 'john@agency.com', 'Developer', 45.00, 'Active', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66'),

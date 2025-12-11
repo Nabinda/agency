@@ -117,14 +117,9 @@ html(lang="en")
         a.nav-link(href="#", class=(activePage === 'payroll' ? 'active' : ''))
           +icon('money')
           | Payroll
-
-      //- Navigation Management
-      h6.text-uppercase.text-muted.small.fw-bold.mb-3 Management
-      nav.nav.flex-column
         a.nav-link(href="#", class=(activePage === 'requests' ? 'active' : ''))
           +icon('clipboard')
           | Requests
-          span.badge.bg-warning.text-dark.ms-auto 3
         a.nav-link(href="#", class=(activePage === 'settings' ? 'active' : ''))
           +icon('settings')
           | Settings
