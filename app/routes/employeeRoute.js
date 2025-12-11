@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const employeeController = require("../controllers/employeesController");
 
 // Employee login page
 router.get("/employee-login", (req, res) => {
@@ -18,8 +17,10 @@ router.get("/employee-dashboard", (req, res) => {
   res.render("employee/employee_dashboard");
 });
 
-// Employee list (admin only)
-router.get("/admin/employees", employeeController.employees);
-router.get("/admin/employees/:id", employeeController.employee_id);
+// Employee request holiday
+router.get("/employee/request-holiday", (req, res) => {
+  res.render("employee/holiday_request");
+});
+
 
 module.exports = router;

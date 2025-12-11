@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const employeeController = require("../controllers/employeesController");
+
 const {
   showLogin,
   adminLogin,
@@ -23,6 +25,9 @@ router.get("/admin/dashboard", isAdminLoggedIn, (req, res) => {
   res.render("admin/admin_dashboard", { admin: req.session.admin });
 });
 
+// Employee list (admin only)
+router.get("/admin/employees", employeeController.employees);
+router.get("/admin/employees/:id", employeeController.employee_id);
 // Logout
 router.get("/admin-logout", adminLogout);
 

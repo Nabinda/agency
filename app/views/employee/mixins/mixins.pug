@@ -31,3 +31,21 @@ mixin scheduleRow(startDate, endDate, status)
             .status-badge(style="background-color: rgba(234, 179, 8, 0.15); color: #eab308;")
               +icon('calendar', 'me-1')
               | Scheduled
+
+
+
+//- holidayRequestRow(date, days, reason, status, statusColorVar)
+//- Renders a single row in the Holiday Request History list.
+//- statusColorVar should be a CSS variable like 'var(--accent-green)'
+mixin holidayRequestRow(date, days, reason, status, statusColorVar)
+  .list-group-item.schedule-item.p-4(style="background-color: transparent;")
+    .d-flex.align-items-start.justify-content-between.flex-wrap
+      .me-4.mb-2.mb-sm-0
+        h6.fw-bold.mb-1= date
+        p.text-muted.small.mb-0= reason
+      .d-flex.align-items-center
+        .text-end.me-3
+          h6.fw-bold.mb-1.text-primary= days
+          p.text-muted.small.mb-0 Total Days
+        span.status-badge(class=`status-badge-${status.toLowerCase()}`)
+          | #{status}
