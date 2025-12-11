@@ -1,0 +1,185 @@
+extends admin_layout.pug
+
+//- Set active page for sidebar
+block append head
+  - var activePage = 'timesheets';
+
+//- Page Specific Styles
+block append head
+  style.
+    .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; color: var(--text-light); }
+    .table { --bs-table-bg: transparent; color: var(--text-light); }
+    .table thead th { border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 500; padding: 1rem 1.5rem; }
+    .table tbody td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    
+    /* Calendar Strip Styles */
+    .calendar-strip {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.75rem;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin; /* Firefox */
+      scrollbar-color: var(--border-color) transparent;
+    }
+    .calendar-strip::-webkit-scrollbar { height: 4px; }
+    .calendar-strip::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; }
+    
+    .date-card {
+      min-width: 70px;
+      height: 74px;
+      border: 1px solid var(--border-color);
+      background-color: rgba(255, 255, 255, 0.02);
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-muted);
+    }
+    .date-card:hover { background-color: rgba(255, 255, 255, 0.05); color: var(--text-light); }
+    
+    /* Active Date Styling */
+    .date-card.active {
+      background-color: var(--admin-color);
+      border-color: var(--admin-color);
+      color: white;
+    }
+    .date-card.active .day-name { color: rgba(255,255,255,0.8); }
+    
+    .day-name { font-size: 0.75rem; font-weight: 500; text-transform: uppercase; margin-bottom: 0.25rem; }
+    .day-number { font-size: 1.1rem; font-weight: 700; }
+
+    /* Badges */
+    .badge-success { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 0.4em 0.8em; border-radius: 2rem; font-size: 0.75rem; }
+    .badge-warning { background-color: rgba(234, 179, 8, 0.15); color: #eab308; padding: 0.4em 0.8em; border-radius: 2rem; font-size: 0.75rem; }
+    .badge-secondary { background-color: rgba(255, 255, 255, 0.1); color: #9ca3af; padding: 0.4em 0.8em; border-radius: 2rem; font-size: 0.75rem; }
+
+    .btn-icon { color: var(--text-muted); padding: 0.4rem; border-radius: 0.4rem; }
+    .btn-icon:hover { background-color: rgba(255,255,255,0.1); color: white; }
+    .btn-primary { background-color: var(--admin-color); border: none; color: white; }
+    .btn-primary:hover { background-color: #2563eb; }
+
+    /* Modal & Input Styles */
+    .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light); }
+    .modal-header { border-bottom: 1px solid var(--border-color); }
+    .btn-close { filter: invert(1); }
+    .bg-input { background-color: #0a0f18; border: 1px solid var(--border-color); color: white; }
+    .bg-input:focus { border-color: var(--admin-color); color: white; box-shadow: none; }
+    .form-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    }
+
+block content
+  //- Dummy Data for Timesheets
+  - 
+    var timesheets = [
+      { id: 1, name: 'John Smith', avatar: 'JS', shiftStart: '09:00 AM', shiftEnd: '05:00 PM', clockIn: '08:58 AM', clockOut: '05:05 PM' },
+      { id: 2, name: 'Sarah Johnson', avatar: 'SJ', shiftStart: '09:00 AM', shiftEnd: '05:00 PM', clockIn: '09:15 AM', clockOut: '--:--' },
+      { id: 3, name: 'Mike Brown', avatar: 'MB', shiftStart: '09:00 AM', shiftEnd: '05:00 PM', clockIn: '08:55 AM', clockOut: '--:--' },
+      { id: 4, name: 'Emma Davis', avatar: 'ED', shiftStart: '10:00 AM', shiftEnd: '06:00 PM', clockIn: '--:--', clockOut: '--:--' },
+      { id: 5, name: 'James Wilson', avatar: 'JW', shiftStart: '09:00 AM', shiftEnd: '05:00 PM', clockIn: '09:00 AM', clockOut: '06:30 PM' }
+    ]
+  
+  //- Dummy Data for Calendar (Current week)
+  - 
+    var days = [
+      { day: 'Mon', date: '15', active: false },
+      { day: 'Tue', date: '16', active: false },
+      { day: 'Wed', date: '17', active: true }, //- Current Day
+      { day: 'Thu', date: '18', active: false },
+      { day: 'Fri', date: '19', active: false },
+      { day: 'Sat', date: '20', active: false },
+      { day: 'Sun', date: '21', active: false }
+    ]
+
+  //- Header
+  .d-flex.flex-wrap.justify-content-between.align-items-center.mb-4.gap-3
+    div
+      h2.fw-bold.mb-1 Timesheets
+      p.text-muted.mb-0 Monitor daily attendance and working hours
+    
+    //- Assign Hours Button (Replaced Date Display)
+    button.btn.btn-primary.px-4(type="button", data-bs-toggle="modal", data-bs-target="#assignHoursModal")
+      +icon('plus', 'me-2')
+      | Assign Hours
+
+  //- Horizontal Calendar Strip
+  .mb-4
+    .calendar-strip
+      //- Previous Arrow
+      button.btn.btn-icon.align-self-center.me-2
+        +icon('arrow-left')
+      
+      each day in days
+        div(class=`date-card ${day.active ? 'active' : ''}`)
+          span.day-name= day.day
+          span.day-number= day.date
+          
+      //- Next Arrow
+      button.btn.btn-icon.align-self-center.ms-2
+        +icon('arrow-right')
+
+  //- Timesheet Table
+  .card
+    .table-responsive
+      table.table.align-middle.mb-0
+        thead
+          tr
+            th.ps-4 Employee
+            th Shift Start
+            th Shift End
+            th Clock In
+            th Clock Out
+        tbody
+          each entry in timesheets
+            tr
+              td.ps-4
+                .d-flex.align-items-center
+                  div.rounded-circle.bg-secondary.bg-opacity-25.d-flex.align-items-center.justify-content-center.me-3(style="width:36px; height:36px; font-size: 0.85rem;")= entry.avatar
+                  span.fw-bold= entry.name
+              td.text-muted= entry.shiftStart
+              td.text-muted= entry.shiftEnd
+              td(class=(entry.clockIn === '--:--' ? 'text-muted' : 'fw-medium'))= entry.clockIn
+              td(class=(entry.clockOut === '--:--' ? 'text-muted' : 'fw-medium'))= entry.clockOut
+
+  //- Assign Hours Modal
+  .modal.fade#assignHoursModal(tabindex="-1", aria-hidden="true")
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h5.modal-title Assign Working Hours
+          button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
+        .modal-body
+          form
+            //- Employee Selection
+            .mb-3
+              label.form-label.text-muted.small.fw-bold(for="employeeSelect") EMPLOYEE
+              select#employeeSelect.form-select.bg-input
+                option(selected disabled) Select employee...
+                option(value="1") John Smith
+                option(value="2") Sarah Johnson
+                option(value="3") Mike Brown
+            
+            //- Date Selection Range
+            .row.g-3.mb-3
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="startDate") START DATE
+                input#startDate.form-control.bg-input(type="date")
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="endDate") END DATE
+                input#endDate.form-control.bg-input(type="date")
+
+            //- Time Range
+            .row.g-3
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="startTime") START TIME
+                input#startTime.form-control.bg-input(type="time")
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="endTime") END TIME
+                input#endTime.form-control.bg-input(type="time")
+        
+        .modal-footer.border-top-0
+          button.btn.btn-outline-secondary(type="button", data-bs-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button") Assign Hours
