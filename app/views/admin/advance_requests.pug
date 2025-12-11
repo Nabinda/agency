@@ -1,0 +1,128 @@
+extends admin_layout.pug
+
+//- Set active page (Using 'payroll' or 'requests' depending on your preference)
+block append head
+  - var activePage = 'payroll';
+
+//- Page Specific Styles (Reused from Requests)
+block append head
+  style.
+    .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; color: var(--text-light); }
+    .table { --bs-table-bg: transparent; color: var(--text-light); }
+    .table thead th { border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 500; padding: 1rem 1.5rem; }
+    .table tbody td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    
+    /* Action Buttons */
+    .btn-icon { color: var(--text-muted); padding: 0.4rem; border-radius: 0.4rem; transition: 0.2s; }
+    .btn-icon:hover { background-color: rgba(255,255,255,0.1); color: white; }
+    
+    .btn-view:hover { color: var(--admin-color); background-color: rgba(59, 130, 246, 0.1); }
+    .btn-accept:hover { color: var(--accent-green); background-color: rgba(34, 197, 94, 0.1); }
+    .btn-reject:hover { color: #ef4444; background-color: rgba(239, 68, 68, 0.1); }
+
+    /* Modal Styles */
+    .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light); }
+    .modal-header, .modal-footer { border-color: var(--border-color); }
+    .btn-close { filter: invert(1); }
+
+block content
+  //- Dummy Data for Advance Payments
+  - 
+    var advances = [
+      { id: 1, name: 'John Smith', date: 'Jan 20, 2024', amount: '500.00', reason: 'Unexpected car repair costs.' },
+      { id: 2, name: 'Sarah Johnson', date: 'Feb 05, 2024', amount: '1,200.00', reason: 'Medical emergency expenses.' },
+      { id: 3, name: 'Mike Brown', date: 'Feb 12, 2024', amount: '300.00', reason: 'Covering moving costs upfront.' },
+      { id: 4, name: 'James Wilson', date: 'Feb 15, 2024', amount: '750.00', reason: 'Home appliance replacement.' }
+    ]
+
+  //- Page Header
+  .d-flex.flex-wrap.justify-content-between.align-items-center.mb-4.gap-3
+    div
+      h2.fw-bold.mb-1 Advance Payments
+      p.text-muted.mb-0 Review and approve salary advance requests
+
+  //- Requests Table
+  .card
+    .table-responsive
+      table.table.align-middle.mb-0
+        thead
+          tr
+            th Name
+            th Date Requested
+            th Amount
+            th.text-end Actions
+        tbody
+          each req in advances
+            tr
+              td.fw-bold= req.name
+              td= req.date
+              td
+                span.fw-bold.text-success= '$' + req.amount
+              td.text-end
+                //- View Button
+                button.btn.btn-icon.btn-view.me-1(
+                  type="button", 
+                  data-bs-toggle="modal", 
+                  data-bs-target="#viewModal",
+                  data-name=req.name,
+                  data-date=req.date,
+                  data-amount='$' + req.amount,
+                  data-reason=req.reason
+                )
+                  +icon('eye')
+                
+                //- Accept
+                button.btn.btn-icon.btn-accept.me-1(title="Approve")
+                  +icon('check')
+                
+                //- Reject
+                button.btn.btn-icon.btn-reject(title="Reject")
+                  +icon('x')
+
+  //- View Details Modal
+  .modal.fade#viewModal(tabindex="-1", aria-hidden="true")
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h5.modal-title Advance Request Details
+          button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+        .modal-body
+          .mb-4
+            label.small.text-muted.fw-bold.d-block.mb-1 EMPLOYEE
+            h5.fw-bold#modalName Name
+          
+          .row.mb-4
+            .col-6
+              label.small.text-muted.fw-bold.d-block.mb-1 DATE SUBMITTED
+              p.mb-0#modalDate Date
+            .col-6
+              label.small.text-muted.fw-bold.d-block.mb-1 AMOUNT REQUESTED
+              span.badge.bg-success.bg-opacity-25.text-success.fs-6#modalAmount $0.00
+
+          .mb-2
+            label.small.text-muted.fw-bold.d-block.mb-1 REASON FOR ADVANCE
+            p.p-3.rounded.bg-dark.border.border-secondary.border-opacity-25#modalReason ...
+        
+        .modal-footer
+          button.btn.btn-outline-secondary(type="button", data-bs-dismiss="modal") Close
+          button.btn.btn-primary(type="button") Approve Advance
+
+  //- Script to Populate Modal
+  script.
+    const viewModal = document.getElementById('viewModal')
+    viewModal.addEventListener('show.bs.modal', event => {
+      // Button that triggered the modal
+      const button = event.relatedTarget
+      
+      // Extract info
+      const name = button.getAttribute('data-name')
+      const date = button.getAttribute('data-date')
+      const amount = button.getAttribute('data-amount')
+      const reason = button.getAttribute('data-reason')
+      
+      // Update content
+      viewModal.querySelector('#modalName').textContent = name
+      viewModal.querySelector('#modalDate').textContent = date
+      viewModal.querySelector('#modalAmount').textContent = amount
+      viewModal.querySelector('#modalReason').textContent = reason
+    })

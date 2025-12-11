@@ -1,0 +1,131 @@
+extends admin_layout.pug
+
+//- Set the active page for the sidebar
+block append head
+  - var activePage = 'requests';
+
+//- Page Specific Styles
+block append head
+  style.
+    .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; color: var(--text-light); }
+    .table { --bs-table-bg: transparent; color: var(--text-light); }
+    .table thead th { border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 500; padding: 1rem 1.5rem; }
+    .table tbody td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    
+    /* Action Buttons */
+    .btn-icon { color: var(--text-muted); padding: 0.4rem; border-radius: 0.4rem; transition: 0.2s; }
+    .btn-icon:hover { background-color: rgba(255,255,255,0.1); color: white; }
+    
+    .btn-view:hover { color: var(--admin-color); background-color: rgba(59, 130, 246, 0.1); }
+    .btn-accept:hover { color: var(--accent-green); background-color: rgba(34, 197, 94, 0.1); }
+    .btn-reject:hover { color: #ef4444; background-color: rgba(239, 68, 68, 0.1); }
+
+    /* Modal Styles */
+    .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light); }
+    .modal-header, .modal-footer { border-color: var(--border-color); }
+    .btn-close { filter: invert(1); }
+
+//- Main Content
+block content
+  //- Define Dummy Data INSIDE the block to fix the error
+  - 
+    var requests = [
+      { id: 1, name: 'John Smith', start: 'Jan 20, 2024', end: 'Jan 22, 2024', days: 3, reason: 'Family trip to the mountains. Will have limited connectivity.' },
+      { id: 2, name: 'Sarah Johnson', start: 'Feb 10, 2024', end: 'Feb 10, 2024', days: 1, reason: 'Routine medical appointment.' },
+      { id: 3, name: 'Mike Brown', start: 'Mar 01, 2024', end: 'Mar 05, 2024', days: 5, reason: 'Attending a wedding out of state.' },
+      { id: 4, name: 'Emma Davis', start: 'Jan 25, 2024', end: 'Jan 26, 2024', days: 2, reason: 'Personal leave for moving houses.' }
+    ]
+
+  //- Page Header
+  .d-flex.flex-wrap.justify-content-between.align-items-center.mb-4.gap-3
+    div
+      h2.fw-bold.mb-1 Holiday Requests
+      p.text-muted.mb-0 Review and manage employee leave applications
+
+  //- Requests Table
+  .card
+    .table-responsive
+      table.table.align-middle.mb-0
+        thead
+          tr
+            th Name
+            th Start Date
+            th End Date
+            th Days
+            th.text-end Actions
+        tbody
+          each req in requests
+            tr
+              td.fw-bold= req.name
+              td= req.start
+              td= req.end
+              td
+                span.badge.bg-secondary.bg-opacity-25.text-white= req.days + ' Days'
+              td.text-end
+                //- View Button (Triggers Modal)
+                button.btn.btn-icon.btn-view.me-1(
+                  type="button", 
+                  data-bs-toggle="modal", 
+                  data-bs-target="#viewModal",
+                  data-name=req.name,
+                  data-dates=req.start + ' - ' + req.end,
+                  data-days=req.days,
+                  data-reason=req.reason
+                )
+                  +icon('eye')
+                
+                //- Accept Button
+                button.btn.btn-icon.btn-accept.me-1(title="Accept")
+                  +icon('check')
+                
+                //- Reject/Cancel Button
+                button.btn.btn-icon.btn-reject(title="Reject")
+                  +icon('x')
+
+  //- View Details Modal
+  .modal.fade#viewModal(tabindex="-1", aria-hidden="true")
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h5.modal-title Request Details
+          button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+        .modal-body
+          .mb-4
+            label.small.text-muted.fw-bold.d-block.mb-1 EMPLOYEE
+            h5.fw-bold#modalName Name
+          
+          .row.mb-4
+            .col-6
+              label.small.text-muted.fw-bold.d-block.mb-1 DURATION
+              p.mb-0#modalDates Date Range
+            .col-6
+              label.small.text-muted.fw-bold.d-block.mb-1 TOTAL DAYS
+              span.badge.bg-primary.bg-opacity-25.text-primary#modalDays 0 Days
+
+          .mb-2
+            label.small.text-muted.fw-bold.d-block.mb-1 REASON
+            p.p-3.rounded.bg-dark.border.border-secondary.border-opacity-25#modalReason ...
+        
+        .modal-footer
+          button.btn.btn-outline-secondary(type="button", data-bs-dismiss="modal") Close
+          button.btn.btn-primary(type="button") Approve Request
+
+  //- Script to Populate Modal Data
+  script.
+    const viewModal = document.getElementById('viewModal')
+    viewModal.addEventListener('show.bs.modal', event => {
+      // Button that triggered the modal
+      const button = event.relatedTarget
+      
+      // Extract info from data-* attributes
+      const name = button.getAttribute('data-name')
+      const dates = button.getAttribute('data-dates')
+      const days = button.getAttribute('data-days')
+      const reason = button.getAttribute('data-reason')
+      
+      // Update the modal's content
+      viewModal.querySelector('#modalName').textContent = name
+      viewModal.querySelector('#modalDates').textContent = dates
+      viewModal.querySelector('#modalDays').textContent = days + ' Days'
+      viewModal.querySelector('#modalReason').textContent = reason
+    })

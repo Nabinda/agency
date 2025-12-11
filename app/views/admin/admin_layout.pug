@@ -114,15 +114,12 @@ html(lang="en")
         a.nav-link(href="#", class=(activePage === 'timesheets' ? 'active' : ''))
           +icon('clock')
           | Timesheets
-        a.nav-link(href="#", class=(activePage === 'payroll' ? 'active' : ''))
+        a.nav-link(href="holiday-requests", class=(activePage === 'calendar' ? 'active' : ''))
+          +icon('calendar')
+          | Holiday Requests
+        a.nav-link(href="advance-requests", class=(activePage === 'money' ? 'active' : ''))
           +icon('money')
-          | Payroll
-        a.nav-link(href="#", class=(activePage === 'requests' ? 'active' : ''))
-          +icon('clipboard')
-          | Requests
-        a.nav-link(href="#", class=(activePage === 'settings' ? 'active' : ''))
-          +icon('settings')
-          | Settings
+          | Advance Payment
 
     .dashboard-container
       

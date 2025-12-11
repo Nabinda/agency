@@ -30,6 +30,13 @@ router.get("/admin/employees", isAdminLoggedIn, employeeController.employees);
 router.get("/admin/add-employee", isAdminLoggedIn, (req, res) => {
   res.render("admin/add_employee");
 });
+router.get("/admin/holiday-requests", isAdminLoggedIn, (req, res) => {
+  res.render("admin/holiday_requests");
+});
+
+router.get("/admin/advance-requests", isAdminLoggedIn, (req, res) => {
+  res.render("admin/advance_requests");
+});
 router.get(
   "/admin/employees/:id",
   isAdminLoggedIn,
