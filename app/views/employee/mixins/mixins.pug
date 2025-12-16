@@ -49,3 +49,24 @@ mixin holidayRequestRow(date, days, reason, status, statusColorVar)
           p.text-muted.small.mb-0 Total Days
         span.status-badge(class=`status-badge-${status.toLowerCase()}`)
           | #{status}
+
+
+
+//- Request History Row Mixin
+//- Used in: Employee Holiday/Advance Pages
+//- Params:
+//-   title: Main text (e.g. Date range or Date)
+//-   subtitle: Secondary text (e.g. Duration or Amount)
+//-   description: Description text
+//-   status: Status string (Approved, Rejected, Pending)
+//-   statusColor: Color variable/hex for status badge
+mixin requestHistoryRow(title, subtitle, description, status, statusColor)
+  .list-group-item.bg-transparent.p-4.border-bottom.border-light.border-opacity-10
+    .d-flex.justify-content-between.align-items-center
+      div
+        h6.fw-bold.mb-1= title
+        span.badge.bg-secondary.bg-opacity-25.text-white.me-2= subtitle
+        small.text-muted= description
+      div
+        span.badge(style=`background-color: ${statusColor}25; color: ${statusColor}; border: 1px solid ${statusColor}50`)
+          = status

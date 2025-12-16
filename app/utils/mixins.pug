@@ -1,0 +1,28 @@
+
+//- Toast Notification Mixin
+//- Params:
+//-   message (Required): Text to display
+//-   type (Optional): 'success', 'error', or 'info' (default)
+mixin toastNotification(message, type='info')
+  - var bgClass = 'bg-primary'
+  - var iconClass = 'bi-info-circle-fill'
+  
+  case type
+    when 'success'
+      - bgClass = 'bg-success'
+      - iconClass = 'bi-check-circle-fill'
+    when 'error'
+      - bgClass = 'bg-danger'
+      - iconClass = 'bi-exclamation-triangle-fill'
+    default 
+      - bgClass = 'bg-primary'
+      - iconClass = 'bi-info-circle-fill'
+
+  //- The ID allows JS to find this specific instance if needed
+  .toast-container.position-fixed.bottom-0.end-0.p-3(style="z-index: 11")
+    .toast.align-items-center.text-white.border-0(class=bgClass role='alert' aria-live='assertive' aria-atomic='true')&attributes(attributes)
+      .d-flex
+        .toast-body.d-flex.align-items-center
+          i.bi.me-2.fs-5(class=iconClass)
+          span.toast-text= message
+        button.btn-close.btn-close-white.me-2.m-auto(type='button' data-bs-dismiss='toast' aria-label='Close')

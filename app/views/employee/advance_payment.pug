@@ -1,0 +1,52 @@
+extends employee_layout.pug
+
+block title
+  title Advance Payment • Employee Portal
+
+//- Define the main content block
+block content
+
+  h1.fw-bold.mb-4 Advance Payment Requests
+  
+  .row.g-4
+    .col-lg-5
+      //- --- NEW REQUEST FORM ---
+      .card
+        .card-header.border-bottom.border-light.border-opacity-10.p-4
+          h5.fw-bold.mb-0 Request Advance
+        .card-body.p-4
+          form
+            //- Amount Input
+            .mb-4
+              label.form-label.fw-bold(for="amount") Amount Needed
+              .input-group
+                span.input-group-text.bg-transparent.border-secondary.text-muted £
+                input.form-control#amount(type="number", placeholder="0.00", step="0.01", required)
+            
+            //- Date Input
+            .mb-4
+              label.form-label.fw-bold(for="dateNeeded") Date Needed By
+              input.form-control#dateNeeded(type="date", required)
+
+            //- Reason Textarea
+            .mb-4
+              label.form-label.fw-bold(for="advanceReason") Reason for Request
+              textarea.form-control#advanceReason(rows="3", placeholder="e.g., Medical emergency, car repair, etc.", required)
+
+            //- Submit Button
+            button.btn.btn-teal.w-100(type="submit")
+              +icon('send', 'me-2') 
+              | Submit Request
+
+    .col-lg-7
+      //- --- REQUEST HISTORY TABLE ---
+      .card
+        .card-header.border-bottom.border-light.border-opacity-10.p-4
+          h5.fw-bold.mb-0 Payment History
+        .card-body.p-0
+          .list-group.list-group-flush
+            //- Using the generic requestHistoryRow mixin created in mixins.pug
+            +requestHistoryRow('Jan 15, 2024', '$500.00', 'Car repair expenses', 'Approved', '#22c55e')
+            +requestHistoryRow('Dec 10, 2023', '$200.00', 'Medical bill', 'Approved', '#22c55e')
+            +requestHistoryRow('Nov 20, 2023', '$1,000.00', 'Moving costs', 'Rejected', '#ef4444')
+            +requestHistoryRow('Mar 01, 2024', '$350.00', 'Urgent family matter', 'Pending', '#eab308')

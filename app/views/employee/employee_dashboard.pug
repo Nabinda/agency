@@ -1,13 +1,17 @@
-//- employee_dashboard.pug
-//- This file contains the Dashboard-specific content.
-
 extends employee_layout.pug
+
+//- Ensure mixins are available
+include ../../utils/mixins.pug
 
 block title
   title Dashboard • Employee Portal
 
 //- Define the main content block
 block content
+  //- Add styles to ensure Toast is visible on top of Sidebar/Footer
+  style.
+    .toast-container { z-index: 1090 !important; } 
+
   //- Welcome Card
   .card.mb-4
     .card-body.p-4
@@ -18,17 +22,19 @@ block content
           h2.h3.fw-bold.mb-1 Welcome back, John!
           p.text-muted.mb-0 Ready to start your day?
 
-  //- Time Tracking
+  //- Time Tracking Card
   .card.mb-4
     .card-body.p-4
       .row.align-items-center.g-3
         .col-12.col-md-8
           h4.h5.fw-bold.mb-1 Time Tracking
-          p.text-muted.mb-0 Current status: Not clocked in
+          //- Added ID 'clockStatus' to update text dynamically
+          p#clockStatus.text-muted.mb-0 Current status: Not clocked in
         .col-12.col-md-4.text-md-end
-          button.btn.btn-teal.w-100.w-md-auto
+          //- Added ID 'clockBtn'
+          button#clockBtn.btn.btn-teal.w-100.w-md-auto(type="button")
             +icon('stopwatch', 'me-2')
-            | Clock In
+            span#clockBtnText Clock In
 
   //- Summary Stats
   .row.row-cols-1.row-cols-md-2.row-cols-xl-4.g-3.g-xl-4.mb-4
@@ -78,8 +84,71 @@ block content
       h5.fw-bold.mb-0 This Week's Schedule
     .card-body.p-0
       .list-group.list-group-flush
-        //- These mixins must be defined in mixins/mixins.pug
         +scheduleRow('Monday, Jan 15', '9:00 AM - 5:00 PM • 8h', 'completed')
         +scheduleRow('Tuesday, Jan 16', '9:00 AM - 5:00 PM • 8h', 'working')
         +scheduleRow('Wednesday, Jan 17', '9:00 AM - 5:00 PM • 8h', 'scheduled')
         +scheduleRow('Thursday, Jan 18', '9:00 AM - 5:00 PM • 8h', 'scheduled')
+
+  //- NEW: Use Simplified Mixin with an ID for JS targeting
+  +toastNotification('Ready to start?', 'info')(id="clockToast")
+
+  //- Interactive Script for Clock In/Out UI
+  script.
+    document.addEventListener('DOMContentLoaded', function() {
+      const clockBtn = document.getElementById('clockBtn');
+      const clockBtnText = document.getElementById('clockBtnText');
+      const clockStatus = document.getElementById('clockStatus');
+      
+      // Target the toast container and internal elements
+      const toastEl = document.getElementById('clockToast');
+      const toast = new bootstrap.Toast(toastEl);
+      const toastIcon = toastEl.querySelector('i');
+      const toastText = toastEl.querySelector('.toast-text');
+      
+      let isClockedIn = false;
+
+      clockBtn.addEventListener('click', function() {
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        // Helper to reset classes
+        toastEl.classList.remove('bg-primary', 'bg-success', 'bg-secondary', 'bg-danger');
+        toastIcon.classList.remove('bi-info-circle-fill', 'bi-check-circle-fill', 'bi-clock-fill');
+
+        if (!isClockedIn) {
+          // --- CLOCK IN ACTION ---
+          isClockedIn = true;
+          
+          // Button UI
+          clockBtnText.textContent = "Clock Out";
+          clockBtn.classList.remove('btn-teal');
+          clockBtn.classList.add('btn-danger');
+          
+          // Status Text
+          clockStatus.innerHTML = `Current status: <span class="text-success fw-bold">Clocked In</span> since ${now}`;
+          
+          // Toast UI (Success)
+          toastEl.classList.add('bg-success');
+          toastIcon.classList.add('bi-check-circle-fill');
+          toastText.textContent = "You are now clocked in at " + now;
+          toast.show();
+          
+        } else {
+          // --- CLOCK OUT ACTION ---
+          isClockedIn = false;
+          
+          // Button UI
+          clockBtnText.textContent = "Clock In";
+          clockBtn.classList.remove('btn-danger');
+          clockBtn.classList.add('btn-teal');
+          
+          // Status Text
+          clockStatus.textContent = "Current status: Not clocked in (Last active: " + now + ")";
+          
+          // Toast UI (Info/Secondary)
+          toastEl.classList.add('bg-primary');
+          toastIcon.classList.add('bi-clock-fill');
+          toastText.textContent = "You have clocked out at " + now;
+          toast.show();
+        }
+      });
+    });

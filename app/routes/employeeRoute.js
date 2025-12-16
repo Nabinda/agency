@@ -9,11 +9,11 @@ router.get("/employee-login", (req, res) => {
 // Handle employee login POST (TODO: implement proper login)
 router.post("/employee-login", async (req, res) => {
   const { email, password } = req.body;
-  res.redirect("/employee-dashboard");
+  res.redirect("/employee/dashboard");
 });
 
 // Employee dashboard
-router.get("/employee-dashboard", (req, res) => {
+router.get("/employee/dashboard", (req, res) => {
   res.render("employee/employee_dashboard");
 });
 
@@ -21,6 +21,8 @@ router.get("/employee-dashboard", (req, res) => {
 router.get("/employee/request-holiday", (req, res) => {
   res.render("employee/holiday_request");
 });
-
-
+// Employee request advance payment
+router.get("/employee/request-advance-payment", (req, res) => {
+  res.render("employee/advance_payment");
+});
 module.exports = router;

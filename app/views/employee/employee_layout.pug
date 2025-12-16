@@ -230,24 +230,21 @@ html(lang="en")
       nav.nav.flex-column.flex-grow-1
         //- The 'activeClass' block allows the child template to set which link is active
         block navigation
-          a.nav-link.active-dashboard(href="employee_dashboard.pug")
+          a.nav-link.active-dashboard(href="dashboard")
             +icon('dashboard')
             | Dashboard
           a.nav-link(href="#")
             +icon('calendar')
             | Working Hours
-          a.nav-link(href="/employee/request-holiday")
+          a.nav-link(href="request-holiday")
             +icon('sun')
             | Holiday Requests
-          a.nav-link(href="#")
+          a.nav-link(href="request-advance-payment")
             +icon('money')
             | Advance Payment
           a.nav-link(href="#")
             +icon('file')
             | Payslips
-          a.nav-link(href="#")
-            +icon('profile-circle')
-            | Profile
 
       div.mt-auto
         a.nav-link.text-danger(href="#")
