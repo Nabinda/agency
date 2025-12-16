@@ -66,6 +66,16 @@ html(lang="en")
         color: var(--text-muted);
       }
 
+      /* Modal & Input Styles */
+      .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light); }
+      .modal-header { border-bottom: 1px solid var(--border-color); }
+      .btn-close { filter: invert(1); }
+      .bg-input { background-color: #0a0f18; border: 1px solid var(--border-color); color: white; }
+      .bg-input:focus { border-color: var(--admin-color); color: white; box-shadow: none; }
+      .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+      }
+
       /* --- Sidebar Styles --- */
       .dashboard-container { display: flex; height: 100%; flex-direction: column; }
       @media (min-width: 992px) { .dashboard-container { flex-direction: row; } }

@@ -1,5 +1,7 @@
 extends admin_layout.pug
 
+include mixins/mixins.pug
+
 //- Set active page for sidebar highlighting
 block append head
   - var activePage = 'dashboard';
@@ -53,7 +55,7 @@ block content
        h2.fw-bold.mb-1 Dashboard Overview
        p.text-muted.mb-0 Welcome back, Administrator.
     div
-       button.btn.btn-admin
+       button.btn.btn-admin(type="button", data-bs-toggle="modal", data-bs-target="#assignHoursModal")
           +icon('calendar-event', 'me-2')
           | Create New Shift
 
@@ -135,3 +137,5 @@ block content
               td.py-3 Clocked Out
               td.py-3.text-muted 05:00 PM
               td.pe-4.py-3.text-end: span.badge.bg-secondary.bg-opacity-25.text-secondary Completed
+
+    +assignHours()

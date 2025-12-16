@@ -1,5 +1,7 @@
 extends admin_layout.pug
 
+include mixins/mixins.pug
+
 //- Set active page for sidebar
 block append head
   - var activePage = 'timesheets';
@@ -61,15 +63,7 @@ block append head
     .btn-primary { background-color: var(--admin-color); border: none; color: white; }
     .btn-primary:hover { background-color: #2563eb; }
 
-    /* Modal & Input Styles */
-    .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light); }
-    .modal-header { border-bottom: 1px solid var(--border-color); }
-    .btn-close { filter: invert(1); }
-    .bg-input { background-color: #0a0f18; border: 1px solid var(--border-color); color: white; }
-    .bg-input:focus { border-color: var(--admin-color); color: white; box-shadow: none; }
-    .form-select {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-    }
+
 
 block content
   //- Dummy Data for Timesheets
@@ -102,8 +96,8 @@ block content
     
     //- Assign Hours Button (Replaced Date Display)
     button.btn.btn-primary.px-4(type="button", data-bs-toggle="modal", data-bs-target="#assignHoursModal")
-      +icon('plus', 'me-2')
-      | Assign Hours
+      +icon('calendar-event', 'me-2')
+      | Create New Shift
 
   //- Horizontal Calendar Strip
   .mb-4
@@ -143,43 +137,5 @@ block content
               td.text-muted= entry.shiftEnd
               td(class=(entry.clockIn === '--:--' ? 'text-muted' : 'fw-medium'))= entry.clockIn
               td(class=(entry.clockOut === '--:--' ? 'text-muted' : 'fw-medium'))= entry.clockOut
-
-  //- Assign Hours Modal
-  .modal.fade#assignHoursModal(tabindex="-1", aria-hidden="true")
-    .modal-dialog.modal-dialog-centered
-      .modal-content
-        .modal-header
-          h5.modal-title Assign Working Hours
-          button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
-        .modal-body
-          form
-            //- Employee Selection
-            .mb-3
-              label.form-label.text-muted.small.fw-bold(for="employeeSelect") EMPLOYEE
-              select#employeeSelect.form-select.bg-input
-                option(selected disabled) Select employee...
-                option(value="1") John Smith
-                option(value="2") Sarah Johnson
-                option(value="3") Mike Brown
-            
-            //- Date Selection Range
-            .row.g-3.mb-3
-              .col-6
-                label.form-label.text-muted.small.fw-bold(for="startDate") START DATE
-                input#startDate.form-control.bg-input(type="date")
-              .col-6
-                label.form-label.text-muted.small.fw-bold(for="endDate") END DATE
-                input#endDate.form-control.bg-input(type="date")
-
-            //- Time Range
-            .row.g-3
-              .col-6
-                label.form-label.text-muted.small.fw-bold(for="startTime") START TIME
-                input#startTime.form-control.bg-input(type="time")
-              .col-6
-                label.form-label.text-muted.small.fw-bold(for="endTime") END TIME
-                input#endTime.form-control.bg-input(type="time")
-        
-        .modal-footer.border-top-0
-          button.btn.btn-outline-secondary(type="button", data-bs-dismiss="modal") Cancel
-          button.btn.btn-primary(type="button") Assign Hours
+  //- Assign Hours Modal (Using Mixin)
+  +assignHours()

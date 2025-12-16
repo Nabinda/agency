@@ -1,0 +1,41 @@
+//- Assign Hours Modal Mixin
+//- Used in: Admin Timesheets, Admin Dashboard
+mixin assignHours()
+  .modal.fade#assignHoursModal(tabindex="-1", aria-hidden="true")
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h5.modal-title Assign Working Hours
+          button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
+        .modal-body
+          form
+            //- Employee Selection
+            .mb-3
+              label.form-label.text-muted.small.fw-bold(for="employeeSelect") EMPLOYEE
+              select#employeeSelect.form-select.bg-input
+                option(selected disabled) Select employee...
+                option(value="1") John Smith
+                option(value="2") Sarah Johnson
+                option(value="3") Mike Brown
+            
+            //- Date Selection Range (Updated for Start/End Date)
+            .row.g-3.mb-3
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="startDate") START DATE
+                input#startDate.form-control.bg-input(type="date")
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="endDate") END DATE
+                input#endDate.form-control.bg-input(type="date")
+
+            //- Time Range
+            .row.g-3
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="startTime") START TIME
+                input#startTime.form-control.bg-input(type="time")
+              .col-6
+                label.form-label.text-muted.small.fw-bold(for="endTime") END TIME
+                input#endTime.form-control.bg-input(type="time")
+        
+        .modal-footer.border-top-0
+          button.btn.btn-outline-secondary(type="button", data-bs-dismiss="modal") Cancel
+          button.btn.btn-primary(type="button") Assign Hours
