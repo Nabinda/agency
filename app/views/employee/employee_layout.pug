@@ -78,6 +78,9 @@ html(lang="en")
         position: relative;
       }
 
+      h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { color: var(--text-light); }
+      .text-muted { color: var(--text-muted) !important; }
+
       /* --- Navigation --- */
       .nav-link {
         color: var(--text-muted);
@@ -217,7 +220,8 @@ html(lang="en")
       @media (min-width: 992px) {
         .mobile-header { display: none !important; }
       }
-  
+    block head
+
   body
     //- Define the navigation content mixin once here
     mixin navContent()
@@ -233,7 +237,7 @@ html(lang="en")
           a.nav-link.active-dashboard(href="dashboard")
             +icon('dashboard')
             | Dashboard
-          a.nav-link(href="#")
+          a.nav-link(href="working-hours")
             +icon('calendar')
             | Working Hours
           a.nav-link(href="request-holiday")
@@ -242,7 +246,7 @@ html(lang="en")
           a.nav-link(href="request-advance-payment")
             +icon('money')
             | Advance Payment
-          a.nav-link(href="#")
+          a.nav-link(href="payslips")
             +icon('file')
             | Payslips
 

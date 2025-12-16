@@ -1,0 +1,76 @@
+extends employee_layout.pug
+
+//- Include Mixins for reusable components
+include ../../utils/mixins.pug
+
+block title
+  title Working Hours • Employee Portal
+
+block content
+  //- Page Header
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h1.fw-bold.mb-0 My Schedule
+    
+    //- Date Navigation (Simple visual representation)
+    .d-flex.align-items-center.bg-dark.rounded.border.border-secondary.border-opacity-25.p-1
+      button.btn.btn-icon.text-muted: +icon('arrow-left')
+      span.px-3.fw-bold.small Jan 21 - Jan 27, 2024
+      button.btn.btn-icon.text-muted: +icon('arrow-right')
+
+  //- Summary Stats Row
+  .row.g-4.mb-4
+    .col-md-6.col-xl-4
+      .card.stat-card.stat-card-blue.h-100
+        .card-body.p-4
+          .d-flex.justify-content-between.align-items-start.mb-3
+            h6.text-muted.mb-0 Scheduled Hours
+            .stat-icon(style="color: var(--accent-blue)")
+              +icon('calendar-event')
+          h3.fw-bold.mb-1 40h
+          p.text-muted.small.mb-0 This Week
+
+    .col-md-6.col-xl-4
+      .card.stat-card.stat-card-green.h-100
+        .card-body.p-4
+          .d-flex.justify-content-between.align-items-start.mb-3
+            h6.text-muted.mb-0 Completed Hours
+            .stat-icon(style="color: var(--accent-green)")
+              +icon('check-fill')
+          h3.fw-bold.mb-1 24h
+          p.text-muted.small.mb-0 So far
+
+    .col-md-6.col-xl-4
+      .card.stat-card.stat-card-yellow.h-100
+        .card-body.p-4
+          .d-flex.justify-content-between.align-items-start.mb-3
+            h6.text-muted.mb-0 Next Shift
+            .stat-icon(style="color: var(--accent-yellow)")
+              +icon('clock')
+          h3.fw-bold.mb-1 Thu, 9:00 AM
+          p.text-muted.small.mb-0 Tomorrow
+
+  //- Detailed Schedule List
+  .card
+    .card-header.border-bottom.border-light.border-opacity-10.p-4.d-flex.justify-content-between.align-items-center
+      h5.fw-bold.mb-0 Weekly Shift Log
+      button.btn.btn-outline-secondary.btn-sm
+        +icon('file', 'me-2')
+        | Export PDF
+
+    .card-body.p-0
+      .list-group.list-group-flush
+        //- Using reusable mixin: scheduleRow(date, time, status)
+        +scheduleRow('Monday, Jan 22', '09:00 AM - 05:00 PM • 8h', 'completed')
+        +scheduleRow('Tuesday, Jan 23', '09:00 AM - 05:00 PM • 8h', 'completed')
+        +scheduleRow('Wednesday, Jan 24', '09:00 AM - 05:00 PM • 8h', 'working')
+        +scheduleRow('Thursday, Jan 25', '09:00 AM - 05:00 PM • 8h', 'scheduled')
+        +scheduleRow('Friday, Jan 26', '09:00 AM - 05:00 PM • 8h', 'scheduled')
+        
+        //- Weekend / Off days visualization
+        .list-group-item.bg-transparent.schedule-item.px-4.opacity-50
+          .row.align-items-center
+            .col-12.col-md-6.mb-2.mb-md-0
+              h6.fw-bold.mb-1.text-muted Saturday, Jan 27
+              span.text-muted.small No Shift Assigned
+            .col-12.col-md-6.text-md-end
+              span.badge.border.border-secondary.text-muted Off Day

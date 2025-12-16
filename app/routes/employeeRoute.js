@@ -16,7 +16,10 @@ router.post("/employee-login", async (req, res) => {
 router.get("/employee/dashboard", (req, res) => {
   res.render("employee/employee_dashboard");
 });
-
+// Employee working logs
+router.get("/employee/working-hours", (req, res) => {
+  res.render("employee/working_logs");
+});
 // Employee request holiday
 router.get("/employee/request-holiday", (req, res) => {
   res.render("employee/holiday_request");
@@ -25,4 +28,10 @@ router.get("/employee/request-holiday", (req, res) => {
 router.get("/employee/request-advance-payment", (req, res) => {
   res.render("employee/advance_payment");
 });
+
+// Employee request advance payment
+router.get("/employee/payslips", (req, res) => {
+  res.render("employee/payslip_logs");
+});
+
 module.exports = router;

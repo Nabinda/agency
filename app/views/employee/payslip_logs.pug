@@ -1,0 +1,154 @@
+extends employee_layout.pug
+
+//- Include Mixins for reusable components
+include ../../utils/mixins.pug
+
+block title
+  title Payslips • Employee Portal
+
+//- Page Specific Styles for Dark Mode Visibility
+block append head
+  style.
+    /* Global Text Fixes */
+    h1, h2, h3, h4, h5, h6 { color: var(--text-light); }
+    .text-muted { color: var(--text-muted) !important; }
+    .text-light { color: var(--text-light); }
+
+    /* Card & Table Styling */
+    .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.75rem; color: var(--text-light); }
+    .table { --bs-table-bg: transparent; color: var(--text-light); }
+    .table thead th { border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 500; padding: 1rem 1.5rem; }
+    .table tbody td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+    
+    /* Action Buttons */
+    .btn-icon { color: var(--text-muted); padding: 0.4rem; border-radius: 0.4rem; transition: 0.2s; }
+    .btn-icon:hover { background-color: rgba(255,255,255,0.1); color: white; }
+
+    /* Modal Styling */
+    .modal-content { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-light); }
+    .modal-header, .modal-footer { border-color: var(--border-color); }
+    .btn-close { filter: invert(1); }
+
+block content
+  //- Mock Data
+  - 
+    var payslips = [
+      { id: 'PS-2024-001', date: 'Jan 31, 2024', period: 'Jan 01 - Jan 31', earnings: '3,200.00', deductions: '450.00', net: '2,750.00' },
+      { id: 'PS-2023-012', date: 'Dec 31, 2023', period: 'Dec 01 - Dec 31', earnings: '3,200.00', deductions: '450.00', net: '2,750.00' },
+      { id: 'PS-2023-011', date: 'Nov 30, 2023', period: 'Nov 01 - Nov 30', earnings: '3,100.00', deductions: '440.00', net: '2,660.00' },
+      { id: 'PS-2023-010', date: 'Oct 31, 2023', period: 'Oct 01 - Oct 31', earnings: '3,100.00', deductions: '440.00', net: '2,660.00' }
+    ]
+
+  //- Header
+  .d-flex.justify-content-between.align-items-center.mb-4
+    div
+      h1.fw-bold.mb-1 My Payslips
+      p.text-muted.mb-0 History of payments and deductions
+    
+  //- Summary Stats
+  .row.g-4.mb-4
+    .col-md-4
+      .card.stat-card.stat-card-green.h-100
+        .card-body.p-4
+          h6.text-muted.mb-3 Net Pay (YTD)
+          h2.fw-bold.mb-0 $8,070.00
+    .col-md-4
+      .card.stat-card.stat-card-blue.h-100
+        .card-body.p-4
+          h6.text-muted.mb-3 Last Pay Date
+          h2.fw-bold.mb-0 Jan 31
+    .col-md-4
+      .card.stat-card.stat-card-yellow.h-100
+        .card-body.p-4
+          h6.text-muted.mb-3 Next Pay Date
+          h2.fw-bold.mb-0 Feb 29
+
+  //- Payslip List Table
+  .card
+    .table-responsive
+      table.table.align-middle.mb-0
+        thead
+          tr
+            th.ps-4 Period
+            th Pay Date
+            th Gross
+            th Net Pay
+            th Status
+            th.text-end.pe-4 Action
+        tbody
+          each slip in payslips
+            tr
+              td.ps-4
+                span.fw-bold.d-block.text-light= slip.period
+                small.text-muted= slip.id
+              td.text-light= slip.date
+              td.text-light= '£' + slip.earnings
+              td.fw-bold.text-success= '£' + slip.net
+              td
+                span.badge.bg-success.bg-opacity-25.text-success Paid
+              td.text-end.pe-4
+                //- View Button (Triggers Modal)
+                button.btn.btn-icon.text-primary(
+                  type="button", 
+                  title="View Details",
+                  data-bs-toggle="modal", 
+                  data-bs-target="#payslipModal",
+                  data-period=slip.period,
+                  data-net=slip.net,
+                  data-earnings=slip.earnings,
+                  data-deductions=slip.deductions
+                )
+                  +icon('eye')
+
+  //- Payslip Detail Modal
+  .modal.fade#payslipModal(tabindex="-1", aria-hidden="true")
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header.border-secondary.border-opacity-25
+          h5.modal-title Payslip Details
+          button.btn-close.btn-close-white(type="button", data-bs-dismiss="modal", aria-label="Close")
+        .modal-body
+          .text-center.mb-4
+            p.text-muted.mb-1 Net Pay
+            h2.fw-bold.text-success#modalNetPay £0.00
+            p.small.text-muted#modalPeriod Period
+          
+          .card.bg-dark.border-secondary.border-opacity-25.mb-3
+            .card-body
+              .d-flex.justify-content-between.mb-2
+                span.text-muted Gross Earnings
+                span.fw-bold#modalEarnings £0.00
+              .d-flex.justify-content-between
+                span.text-muted Deductions (Tax/NI)
+                span.text-danger#modalDeductions -£0.00
+              hr.border-secondary.border-opacity-25
+              .d-flex.justify-content-between
+                span.fw-bold Total Net Pay
+                span.fw-bold.text-success#modalTotal £0.00
+        
+        .modal-footer.border-top-0
+          button.btn.btn-primary(type="button", data-bs-dismiss="modal") Close
+ 
+
+  //- Script to Populate Modal Data dynamically
+  script.
+    const payslipModal = document.getElementById('payslipModal')
+    if (payslipModal) {
+      payslipModal.addEventListener('show.bs.modal', event => {
+        // Button that triggered the modal
+        const button = event.relatedTarget
+        
+        // Extract info from data-* attributes
+        const period = button.getAttribute('data-period')
+        const net = button.getAttribute('data-net')
+        const earnings = button.getAttribute('data-earnings')
+        const deductions = button.getAttribute('data-deductions')
+        
+        // Update the modal's content
+        payslipModal.querySelector('#modalPeriod').textContent = period
+        payslipModal.querySelector('#modalNetPay').textContent = '£' + net
+        payslipModal.querySelector('#modalTotal').textContent = '£' + net
+        payslipModal.querySelector('#modalEarnings').textContent = '£' + earnings
+        payslipModal.querySelector('#modalDeductions').textContent = '-£' + deductions
+      })
+    }
