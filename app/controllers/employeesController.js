@@ -31,6 +31,23 @@ const employee_id = async (req, res) => {
 };
 
 
+const deleteAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Employee.deleteAccount(id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    return res.json({ message: "Employee deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting employee:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getDashboard = async (req, res) => {
   try {
     const employees = await Employee.getList();

@@ -90,6 +90,17 @@ class Employee {
   async verifyPassword(password) {
     return bcrypt.compare(password, this.password);
   }
+
+
+static async deleteAccount(id) {
+  const result = await query(
+    "DELETE FROM employees WHERE id = ?",
+    [id]
+  );
+
+  // result.affectedRows === 1 means delete was successful
+  return result.affectedRows > 0;
+}
 }
 
 module.exports = Employee;
