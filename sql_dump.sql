@@ -34,6 +34,16 @@ CREATE TABLE `employees` (
 );
 
 
+CREATE TABLE shifts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  employee_id INT NOT NULL,
+  shift_date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 INSERT INTO `employees` (`name`, `email`, `role`, `hourly_rate`, `status`, `password`)
 VALUES
 ('John Smith', 'john@agency.com', 'Developer', 45.00, 'Active', '$2a$12$tSUIgGIZbMwJV5pVmcRILeZ9MLVJxLiqsrkSCaPnM4gGcILPGr.66'),

@@ -1,13 +1,10 @@
+//- views/admin/admin_dashboard.pug
 extends admin_layout.pug
 
 include mixins/mixins.pug
 
-//- Set active page for sidebar highlighting
-block append head
+block head
   - var activePage = 'dashboard';
-
-//- Page-Specific Styles
-block append head
   style.
     /* Card Styles */
     .card {
@@ -19,8 +16,6 @@ block append head
       transition: border-color 0.3s ease;
     }
     .card-hover-admin:hover { border-color: var(--admin-color); }
-
-    /* Dashboard Buttons */
     .btn-admin {
       background-color: var(--admin-color);
       border: none;
@@ -31,72 +26,53 @@ block append head
       display: inline-flex; align-items: center; justify-content: center;
     }
     .btn-admin:hover { background-color: #2563eb; color: white; }
-
-    /* Icon Boxes for Stats */
-    .icon-box {
-      width: 42px; height: 42px;
-      border-radius: 0.5rem;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
+    .icon-box { width: 42px; height: 42px; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 1.2rem; }
     .icon-box-admin { background: rgba(59, 130, 246, 0.15); color: var(--admin-color); }
     .icon-box-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
     .icon-box-yellow { background: rgba(245, 158, 11, 0.15); color: var(--accent-yellow); }
-
-    /* Table Styles */
     .table { --bs-table-bg: transparent; --bs-table-hover-bg: rgba(255,255,255,0.03); }
 
-//- Main Dashboard Content
 block content
   //- Header
   .d-flex.justify-content-between.align-items-end.mb-4
     div
-       h2.fw-bold.mb-1 Dashboard Overview
-       p.text-muted.mb-0 Welcome back, Administrator.
+      h2.fw-bold.mb-1 Dashboard Overview
+      p.text-muted.mb-0 Welcome back, Administrator.
     div
-       button.btn.btn-admin(type="button", data-bs-toggle="modal", data-bs-target="#assignHoursModal")
-          +icon('calendar-event', 'me-2')
-          | Create New Shift
+      button.btn.btn-admin(type="button", data-bs-toggle="modal", data-bs-target="#assignHoursModal")
+        +icon('calendar-event', 'me-2')
+        | Create New Shift
 
   //- Stats Row
   .row.g-4.mb-5
-    
-    //- Card 1 (Admin Theme)
     .col-12.col-md-6.col-xl-3
       .card.card-hover-admin.h-100
         .card-body
           .icon-box.icon-box-admin
-             +icon('user')
-          h3.fw-bold.mb-1 124
+            +icon('user')
+          h3.fw-bold.mb-1 #{employees ? employees.length : 0}
           p.text-muted.small.mb-0 Total Employees
-
-    //- Card 2
     .col-12.col-md-6.col-xl-3
       .card.card-hover-admin.h-100
         .card-body
           .icon-box.icon-box-admin
-             +icon('clock')
+            +icon('clock')
           h3.fw-bold.mb-1 4,320
           p.text-muted.small.mb-0 Hours Tracked (Jan)
-
-    //- Card 3 (Green Accent for Money)
     .col-12.col-md-6.col-xl-3
-       .card.card-hover-admin.h-100
-         .card-body
-           .icon-box.icon-box-green
-              +icon('money')
-           h3.fw-bold.mb-1 $142k
-           p.text-muted.small.mb-0 Payroll Forecast
-
-    //- Card 4 (Yellow Accent for Alerts)
+      .card.card-hover-admin.h-100
+        .card-body
+          .icon-box.icon-box-green
+            +icon('money')
+          h3.fw-bold.mb-1 $142k
+          p.text-muted.small.mb-0 Payroll Forecast
     .col-12.col-md-6.col-xl-3
-       .card.card-hover-admin.h-100
-         .card-body
-           .icon-box.icon-box-yellow
-              +icon('alert')
-           h3.fw-bold.mb-1 8
-           p.text-muted.small.mb-0 Pending Requests
+      .card.card-hover-admin.h-100
+        .card-body
+          .icon-box.icon-box-yellow
+            +icon('alert')
+          h3.fw-bold.mb-1 8
+          p.text-muted.small.mb-0 Pending Requests
 
   //- Recent Activity Table
   h5.fw-bold.mb-3 Recent Activity
@@ -119,23 +95,6 @@ block content
               td.py-3 Clocked In
               td.py-3.text-muted 08:58 AM
               td.pe-4.py-3.text-end: span.badge.bg-success.bg-opacity-25.text-success On Time
-            
-            tr.border-secondary.border-opacity-10
-              td.ps-4.py-3
-                .d-flex.align-items-center
-                  div.rounded-circle.bg-secondary.bg-opacity-25.d-flex.align-items-center.justify-content-center.me-2(style="width:32px; height:32px; font-size: 0.8rem;") ED
-                  | Emma Davis
-              td.py-3 Holiday Request
-              td.py-3.text-muted 09:15 AM
-              td.pe-4.py-3.text-end: span.badge.bg-warning.bg-opacity-25.text-warning Pending
-            
-            tr.border-transparent
-              td.ps-4.py-3
-                .d-flex.align-items-center
-                  div.rounded-circle.bg-secondary.bg-opacity-25.d-flex.align-items-center.justify-content-center.me-2(style="width:32px; height:32px; font-size: 0.8rem;") MB
-                  | Mike Brown
-              td.py-3 Clocked Out
-              td.py-3.text-muted 05:00 PM
-              td.pe-4.py-3.text-end: span.badge.bg-secondary.bg-opacity-25.text-secondary Completed
 
-    +assignHours()
+  //- Include the Assign Hours Modal via mixin
+  +assignHours(employees)

@@ -1,3 +1,5 @@
+// employee_login.pug
+
 doctype html
 html(lang="en")
   head
@@ -17,84 +19,47 @@ html(lang="en")
         --app-bg: #0a0f18;
         --card-bg: #131b26;
         --text-light: #e5e7eb;
-        /* Employee Theme Color (Teal) taken from your main file */
         --employee-color: #14b8a6;
       }
 
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--app-bg);
-        color: var(--text-light);
-      }
+      body { font-family: 'Inter', sans-serif; background-color: var(--app-bg); color: var(--text-light); }
+      .login-card { background-color: var(--card-bg); border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.08); padding: 2.5rem; box-shadow: 0 6px 18px rgba(0,0,0,0.35); transition: border-color 0.3s ease; }
+      .login-card:hover { border-color: var(--employee-color); }
+      .employee-icon { padding: 0.75rem; border-radius: 0.75rem; background-color: rgba(20, 184, 166, 0.15); color: var(--employee-color); display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; }
+      .btn-employee { background-color: var(--employee-color); border-color: var(--employee-color); color: white; transition: transform .15s ease-in-out; }
+      .btn-employee:hover { background-color: #0d9488; border-color: #0d9488; transform: scale(1.02); }
 
-      .login-card {
-        background-color: var(--card-bg);
-        border-radius: 0.75rem;
-        border: 1px solid rgba(255,255,255,0.08);
-        padding: 2.5rem;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-        transition: border-color 0.3s ease;
-      }
-
-      /* Hover effect uses Employee Color */
-      .login-card:hover {
-        border-color: var(--employee-color);
-      }
-
-      .employee-icon {
-        padding: 0.75rem;
-        border-radius: 0.75rem;
-        background-color: rgba(20, 184, 166, 0.15);
-        color: var(--employee-color);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-      }
-
-      .btn-employee {
-        background-color: var(--employee-color);
-        border-color: var(--employee-color);
-        color: white;
-        transition: transform .15s ease-in-out;
-      }
-
-      .btn-employee:hover {
-        /* A slightly darker teal for hover state */
-        background-color: #0d9488;
-        border-color: #0d9488;
-        transform: scale(1.02);
-      }
-
-  //- Body uses flex-column for sticky footer
   body.d-flex.flex-column.min-vh-100
-
-    //- Main content wrapper
     .content-wrapper.d-flex.align-items-center.justify-content-center.w-100.p-3.flex-grow-1
       .container(style="max-width: 420px;")
         .login-card.text-center
-
-          //- Employee Icon (User)
           .employee-icon.mb-4
             +icon('user')
 
           h2.fw-bold.text-white.mb-2 Employee Login
           p.text-secondary.mb-4 Clock in, view your schedule, and access payslips.
 
-          //- Login Form
+          if error
+            .alert.alert-danger.text-start #{error}
+
           form(method="POST" action="/employee-login")
             .mb-3.text-start
               label.form-label(for="email") Email Address
-              input#email.form-control.bg-dark.text-light.border-0.py-2(type="email" name="email" required, placeholder="name@company.com")
+              input#email.form-control.bg-dark.text-light.border-0.py-2(
+                type="email" 
+                name="email" 
+                required 
+                placeholder="name@company.com" 
+                value=typeof email !== 'undefined' ? email : ''
+              )
 
             .mb-4.text-start
               label.form-label(for="password") Password
-              input#password.form-control.bg-dark.text-light.border-0.py-2(type="password" name="password" required, placeholder="Enter your password")
+              input#password.form-control.bg-dark.text-light.border-0.py-2(type="password" name="password" required placeholder="Enter your password")
 
-            button.btn.btn-employee.btn-lg.w-100(type= "submit")
+            button.btn.btn-employee.btn-lg.w-100(type="submit")
               | Login
               +icon('arrow-right', 'ms-2')
 
-    //- Footer
     footer.text-center.text-secondary.mt-4.pb-3
       small © Workforce Manager — Secure Employee Access
