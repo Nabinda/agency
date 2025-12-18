@@ -48,6 +48,30 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+
+const updateAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, role, hourly_rate, status } = req.body;
+
+    const updated = await Employee.updateAccount(id, {
+      name,
+      role,
+      hourly_rate,
+      status,
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    return res.json({ message: "Employee updated successfully" });
+  } catch (err) {
+    console.error("Error updating employee:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 const getDashboard = async (req, res) => {
   try {
     const employees = await Employee.getList();

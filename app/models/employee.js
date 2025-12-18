@@ -92,7 +92,7 @@ class Employee {
   }
 
 
-static async deleteAccount(id) {
+  static async deleteAccount(id) {
   const result = await query(
     "DELETE FROM employees WHERE id = ?",
     [id]
@@ -100,7 +100,18 @@ static async deleteAccount(id) {
 
   // result.affectedRows === 1 means delete was successful
   return result.affectedRows > 0;
-}
+  }
+
+  static async updateAccount(id, { name, role, hourly_rate, status }) {
+    const result = await query(
+      `UPDATE employees 
+      SET name = ?, role = ?, hourly_rate = ?, status = ?
+      WHERE id = ?`,
+      [name,  role, hourly_rate, status, id]
+    );
+
+    return result.affectedRows > 0;
+  }
 }
 
 module.exports = Employee;
